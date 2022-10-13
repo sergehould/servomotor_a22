@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="7">
+        <file>
+            <url>DCMotor_model3.c</url>
+            <bookmark id="5">
+                <name/>
+                <line>14</line>
+                <key/>
+            </bookmark>
+            <bookmark id="4">
+                <name/>
+                <line>37</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>main_pid3.c</url>
+            <bookmark id="1">
+                <name/>
+                <line>84</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>pid.c</url>
+            <bookmark id="7">
+                <name/>
+                <line>36</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>main_pid5.c</url>
+            <bookmark id="6">
+                <name/>
+                <line>91</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>main_pid4.c</url>
+            <bookmark id="2">
+                <name/>
+                <line>54</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/console_print.h</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/ol_control.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/configuration.h</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/main_pid5.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/pv_measure.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/pwm.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/common/Tick_core.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/common/console.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/trajectory.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/pwm.h</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/pid.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/adc.c</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/DCMotor_model.h</file>
+            <file>file:/C:/serge/Vanier/courses/MPLAB_projects/projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/DCMotor_model_electr_mechan_v2.c</file>
+        </group>
+    </open-files>
+</project-private>
