@@ -17,13 +17,12 @@
 #include <math.h>
 #include <xc.h>
 #include <stdio.h>
-#include "../../common/console.h"
-#include "console_print.h"
+#include "console.h"
 #include "DCMotor_model.h"
 #include <stdint.h>
 #include <string.h>
 #include "configuration.h"
-#include "public.h"
+
 
 
 /* Globals */
