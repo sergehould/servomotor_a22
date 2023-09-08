@@ -5,6 +5,7 @@
  *  SH      11 July 2022            V1.0    
  *  SH      16 Aug. 2022            V2.0    print_bar() to print both simulation and target mode
  *                                          It uses response_print_pos_neg2() see also VStudio code
+ * SH       1 Sept. 2023            v2.1    Add plot_two_int32()
  * 
  * 
  * */                                                 
@@ -16,12 +17,13 @@
 #include <math.h>
 #include <xc.h>
 #include <stdio.h>
-#include "console.h"
-//#include "console_print.h"
+#include "../../common/console.h"
+#include "console_print.h"
 #include "DCMotor_model.h"
 #include <stdint.h>
 #include <string.h>
 #include "configuration.h"
+#include "public.h"
 
 
 /* Globals */
@@ -111,9 +113,15 @@ void set_pwm(int pwm){
     vref =(double)_pwm/1000;     // must divide by 1000 if pwm of 10000 is 10V. In mA, must multiply by 1000. They cancel each other.
     //vref /= 6;                  // To compensate for the discrepancy between the model and the real motor
     vm = vref-KS*speed;
-
+    /* with inductance */
+//    vl = vm - R*i;
+//    didt = vl/L;
+//    i = didt*DT + i;
+    
     /* without inductance- simplified */
     i = vm/R;
+            
+
     /* Static friction */
     i = static_friction( i, speed);
     
@@ -124,6 +132,8 @@ void set_pwm(int pwm){
     speed = dsdt*DT + speed;
     debug2 =speed;
     position = position+ speed *DT; // position in rad
+    // 1280 tics/rev and 2PI rad/rev
+    // 1280/2PI =  203.7 tics/rad
     position_tics = position*203.7; // position in tics
     
     pos = position_tics;  // for display
@@ -147,7 +157,7 @@ static void response_print_pos_neg2(int console, int range, int scale, int zero,
     //printf(buff);
     fprintf2(console, buff);
 
-    sprintf(buff, "%3d", val_print);
+    sprintf(buff, "%3d ", val_print);
 
     if (val < 0) {
         /* Prints negative plot scaled down val to a specific range */
@@ -203,7 +213,7 @@ static void response_print_pos_neg2(int console, int range, int scale, int zero,
                   sprintf(buff2,"%c", character);
                   fprintf2(console, buff2);
             }
-            sprintf(buff, "%3d", val_print);
+            sprintf(buff, " +%3d ", val_print);
             //printf(buff);
             fprintf2(console, buff);
             for (j = 0; j < (val * half_scale) / range; j++) {
@@ -224,7 +234,7 @@ static void response_print_pos_neg2(int console, int range, int scale, int zero,
                 sprintf(buff2,"%c", character);
                 fprintf2(console, buff2);
             }
-            sprintf(buff, "%3d", val_print);
+            sprintf(buff, " +%3d ", val_print);
             //printf(buff);
             fprintf2(console, buff);
 
@@ -237,7 +247,7 @@ static void response_print_pos_neg2(int console, int range, int scale, int zero,
 /* In simulation mode, get_pv() and reaADC() are provided by DCMotor_mode_xxx.c */
 /* In target mode, get_pv() and reaADC() are provided respectively by pv_measure.c and adc32.c */
 
-int32_t get_pv(void){
+int get_pv(void){
         return pos;
 }
 
@@ -299,6 +309,23 @@ void print_bar(int con, int val, char character, int centre, int range){
     
 }
 
+void plot_two_int32(int con, int val1, int val2, int centre, int range){
+     if(time%25 == 0){
+        if(val1 > 40000) val1 = 40000;
+        else if (val1 < -40000) val1 = -40000;
+        if(val2 > 40000) val2 = 40000;
+        else if (val2 < -40000) val2 = -40000;        
+        if(centre> 100) centre = 100;
+        else if(centre < 0) centre = 0;
+        if(range> 80000) range = 80000;
+        else if(range < 0) range = 0;
+        //void response_print_pos_neg2(int console, int range, int scale, int zero, int val, char character, int time) 
+         response_print_pos_neg2(con, range, 110, centre, val1, '@', time/5);
+         response_print_pos_neg2(con, range, 110, centre, val2, '*', time/5);
+     }
+    
+}
+
 double static_friction(double _i, double speed){
     if(fabs(speed)>OFFSET)return _i;
 	else{
@@ -328,5 +355,31 @@ void print_bar(int con, int val, char character, int centre, int range){
      
 }
 
-
+/* Description: Function to plot two int32 variables to the specified  
+ *              serial console. 
+ *  
+ * Parameters: 
+ *      con: specifies the console (e.g. C_UART1, C_UART2). 
+ *      val1: specifies the first value to display.
+ *      val2: specifies the second value to display  
+ *      center: specifies the horizontal position of the zero for the bar graph.  
+ *              The range of values are 0% to 100% (e.g. 50 for 50%). 
+ *      range: specifies the range of the bar graph (e.g. 1000). 
+ * 
+ *      Usage example#1: 
+ *          The following line prints pv and adc as two bar graphs.
+ *          The bar graph zero is at the left side of the screen (0%).  
+ *          The range is 1000 (0 to 1000 in this case).  
+ *          print_bar(C_UART2, get_pv(), adc, 0 , 1000 );  
+ *  
+ *      Usage example#2: 
+ *          The following line prints pv and pwm as two bar graphs. 
+ *          The bar graph zero is in the center of the screen (50%).  
+ *          The range is 20000 (-10000 to 10000 in this case).  
+ *          print_bar(C_UART2, pv, pwm, 50 , 20000 );      
+*/ 
+void plot_two_int32(int con, int val1, int val2, int centre, int range){
+    send_two_int32(val1,val2);
+}
 #endif
+
