@@ -18,6 +18,8 @@ unsigned int adc_read( int);
 void set_pwm(int);
 #endif
 void print_bar(int con, int val, char character, int centre, int range);
+void plot_two_int32(int con, int val1, int val2, int centre, int range);
+
 
 #endif	/* DCMOTOR_MODE_H */
 
