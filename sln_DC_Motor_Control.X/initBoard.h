@@ -16,13 +16,13 @@ extern "C" {
 /**
     Section: Macros
 */
-#define io_init     	initIOs
-#define ios_init     	initIOs
+#define io_init     	ios_init 
+#define initIOs         ios_init     	
 /**
     Section: Function Prototypes
 */
 //void initTimer2( void);
-void initIOs(void);
+void ios_init(void);
 
 #ifdef	__cplusplus
 }
