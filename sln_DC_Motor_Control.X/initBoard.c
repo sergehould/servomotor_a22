@@ -19,6 +19,7 @@
 *                                              for both Microstick and MX3
 * Serge Hould      19 Apr. 2022     v2.3       Set both SYSCLK and PBCLK to 40MHz for Expolrer16-32 
 * Serge Hould      23 Aug. 2022     v2.4       For Expolrer16-32 add D9 and modify S5 in initIOs()
+* Serge Hould      10 Jan. 2023     v2.5       rename initIOs() to ios_init()
 *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
  
@@ -36,7 +37,7 @@
 //(8MHz Crystal/ FPLLIDIV * FPLLMUL / FPLLODIV)
 // PBCLK = 40 MHz
 // Primary Osc w/PLL (HS+PLL)
-// WDT OFF, Peripheral Bus is CPU clock÷8
+// WDT OFF, Peripheral Bus is CPU clockÃ·8
 // Other options are default as per datasheet
 // see file:C:\Program Files (x86)\Microchip\xc32\v1.40\docs\config_docs\32mx795f512l.html
 #pragma config FPLLMUL = MUL_20
@@ -82,12 +83,13 @@
 #pragma config FPLLODIV =	DIV_2   // Divide After PLL (now 40 MHz)
 #endif
 
-/* Sets up the IOs */
+
 #if defined EXPLORER_16_32
-void initIOs(void){
+/* Sets up the IOs */
+void ios_init(void){
     DDPCONbits.JTAGEN = 0; // JTAG shared with RA5, RA4, RA1 and RA0
     /* LEDs */
-    TRISAbits.TRISA7 = 0; 		//LED D10 
+    //TRISAbits.TRISA7 = 0; 		//LED D10 
 	TRISAbits.TRISA6 = 0;   	//LED D9
     TRISAbits.TRISA5 = 0;   	//LED D8
     TRISAbits.TRISA4 = 0;       //LED D7
@@ -99,14 +101,15 @@ void initIOs(void){
    
     TRISDbits.TRISD6 =1; //S3
     TRISDbits.TRISD7 =1;//S6
+    TRISAbits.TRISA7 =1; //S5 - shared with LED D10
     TRISDbits.TRISD13 =1;//S4
-    //TRISAbits.TRISA7 =1; //S5 - shared with LED D10
+
 	
     /* Turns off all LEDs*/
      LATA = LATA & 0xffff0000;
 }
 #elif defined MX3
-void initIOs(void){
+void ios_init(void){
     /* LEDs */
     TRISAbits.TRISA7 = 0;       //LED7
     TRISAbits.TRISA6 = 0;       //LED6
@@ -185,7 +188,7 @@ void RGBLED_Init()
     LATDbits.LATD3= 0;      // Blue
 }
 #elif defined MICROSTICK_II
-void initIOs(void){
+void ios_init(void){
     /* LEDs */
     TRISAbits.TRISA0 = 0;       //LED D6
     
