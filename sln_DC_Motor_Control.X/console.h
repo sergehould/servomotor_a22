@@ -1,6 +1,6 @@
 /**********************************************************************
  *	FileName:  console.h  
- * 	
+ * 	 
  *		REVISION HISTORY: 
  * Author:			Date:				Description:
  * SH                11 Jan. 2021        Modify console.c for PIC32MX795F512L
@@ -18,8 +18,9 @@
  * SH				21 Feb. 2022		Add printUart2FromISR()
  * SH				28 Feb. 2022		Add Uart1_init and Uart2_wInt_init macros (Uart2_init already defined in the c file).
  * SH				4 March 2022		Add stdio_lock and stdio_unlock. Only for RTOS system
-  * SH				19 April 2022		Add lcd_init macro. uart1_init not capitalized any more.
- *	SH				30 May 2022			Add LCD_SETTLE_TIME macro
+ * SH				19 April 2022		Add lcd_init macro. uart1_init not capitalized any more.
+ * SH				30 May 2022			Add LCD_SETTLE_TIME macro
+ * SH               6 June 2023         Add uart3_init() and UART3 macro
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #ifndef __CONSOLE2_H_
 #define __CONSOLE2_H_
@@ -33,7 +34,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-//Migration to MPLAB® Harmony from Legacy Peripheral Libraries -- All the Peripheral Library (PLIB) 
+//Migration to MPLABÂ® Harmony from Legacy Peripheral Libraries -- All the Peripheral Library (PLIB) 
 //functions, usually included by plib.h, will be removed from future releases of MPLAB XC32 C/C++ Compiler.
 //        Please refer to the MPLAB Harmony Libraries for new projects. For legacy support, these 
 //        PLIB Libraries will be available for download from:
@@ -60,14 +61,17 @@ extern "C" {
     
 //#include "../common/pmp.h"
 
-#define 	uart1_init			initUart1
-#define 	uart2_init          initUart2
-#define 	uart2_wInt_init		initUart2_wInt
-#define     lcd_init            initLCD	
+#define     initUart1           uart1_init
+#define     initUart2           uart2_init
+#define 	initUart2_wInt      uart2_wInt_init	
+#define     initLCD             lcd_init            
+
+
 
 enum my_fp {
  C_UART1,
  C_UART2,
+ C_UART3,
  C_UART4,
  C_LCD
 };
@@ -111,8 +115,7 @@ enum my_fp {
 #endif
 
 
-void LCDInit(void);
-void initLCD(void);
+void lcd_init(void);
 void LCD_InitSequence(unsigned char bDisplaySetOptions);
 void LCD_DisplaySet(unsigned char bDisplaySetOptions);
 
@@ -175,9 +178,10 @@ void LCDPut(char A);
 //}UART2_STATUS;
 
 void UART2_Initialize(void);
-void initUart2( void);
-void initUart1( void);
-void initUart2_wInt( void);
+void uart2_init( void);
+void uart1_init( void);
+void uart3_init( void);
+void uart2_wInt_init( void);
 int putc2(char c);
 int putc2_noHard(char c);
 char getc2( void);
@@ -185,6 +189,10 @@ void puts2( char *str );
 void outUint8(unsigned char u8_x);
 void putI8(unsigned char u8_x);
 void Uart2_init( void);
+char getch_nb( void);
+char getch_nb_v2( void);
+void send_one_int16(int16_t data);
+void send_two_int32(int sp, int pv);
 /**
   Section: Macro Declarations
 */
@@ -302,6 +310,7 @@ void UART2_Write(uint8_t txData);
 void UART_InitPoll(unsigned int baud);
 void UART_Init(unsigned int baud);
 void UART_PutString(char szData[]);
+void uart4_init(void);
 
 // private functions
 void UART_ConfigurePins();
