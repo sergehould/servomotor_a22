@@ -9,6 +9,8 @@
  * SH       25 March 2021   v2.0    Add function TickDiff() and macro TickDiff2
  * SH       27 April 2021   v2.1    TICKS_PER_SECOND  does not divide SYS_FREQ by two any more.
  * SH       20 May 2021   	v2.2    Add C++ pre-compiler commands: not tested
+ * SH       8 Nov. 2022     v2.3    Add tick_diff and tick_get macros. Add TEN_MS
+ *                                  and HUNDRED_MS
  */
 
 #ifndef TICK_CORE_H
@@ -20,10 +22,14 @@
 extern "C" {
 #endif
 
+#define     tick_diff   TickDiff
+#define     tick_get    TickGet
 
 #define     SYS_FREQ            40000000 // Running at 40MHz
 //#define     TICKS_PER_SECOND    (SYS_FREQ >> 1)   // The core timer increments once for every two ticks of SYSCLK
 #define     TICKS_PER_SECOND    SYS_FREQ   // The core timer increments once for every two ticks of SYSCLK but the APIs set and get in sysclk ticks.
+#define     HUNDRED_MS          SYS_FREQ/10   
+#define     TEN_MS              SYS_FREQ/100   
 /* Macro for some reason does not work with signed int32_t stamp type */
 /* but works with a function: see TickDiff(()*/
 //#define TickDiff2(a)     (TickGet()>=(int64_t)a ? TickGet()-(int64_t)a: 0x100000000 + TickGet()-(int64_t)a)
@@ -33,6 +39,7 @@ void delay_ticks(unsigned int tics);
 void TickCoreReset(void);
 int64_t TickDiff(int32_t stamp);
 void delay_10us( unsigned int );
+void delay_us(unsigned int us);
 
 
 
