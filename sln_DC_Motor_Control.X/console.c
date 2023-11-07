@@ -1009,7 +1009,12 @@ char getch_b( void)
 //   //RTS = 1;
 //}// 
 
-// returns the previous value if empty
+/*
+ Non-blocking polling function for a new character to be
+ Received from the UART2 serial port.
+ Returns the received character if not empty.
+ Returns the previous value if empty.
+*/
 char getch_nb( void){
    static char last =0;
    if( !U2STAbits.URXDA){
@@ -1019,7 +1024,6 @@ char getch_nb( void){
        last = U2RXREG; // if not empty
        return last;
    }
-   //RTS = 1;
 }// 
 
 
@@ -1115,14 +1119,9 @@ uint8_t UART2_Read(void)
     return U2RXREG;
 }
 
-void UART2_Write(uint8_t txData)
-{
-    while(U2STAbits.UTXBF == 1)
-    {
-        
-    }
-
-    U2TXREG = txData;    // Write the data byte to the USART.
+void UART2_Write(uint8_t txData){
+    while(U2STAbits.TRMT == 0);
+    U2TXREG =  txData;   
 }
 
 //UART2_STATUS UART2_StatusGet (void)
@@ -1147,11 +1146,10 @@ void UART2_Write(uint8_t txData)
 //}
 
 /*
-* Function that splits an int16 into two bytes
- * and then it sends them using a
- * start byte, stop byte and checksum byte.
-*/
-
+ Function that splits an int16 into two bytes
+ and then sends them to UART2 serial port using a
+ start byte, stop byte and checksum byte.
+*/ 
 
 #define START_BYTE 0x7E
 #define STOP_BYTE 0x7F
@@ -1161,12 +1159,18 @@ void send_one_int16(int16_t data) {
     uint8_t stop_byte = STOP_BYTE;
     uint8_t data_bytes[2] = { (data >> 8) & 0xFF, data & 0xFF };
     uint8_t checksum = start_byte + stop_byte + data_bytes[0] + data_bytes[1];
-
-    putchar(start_byte);
-    putchar(data_bytes[0]);
-    putchar(data_bytes[1]);
-    putchar(checksum);
-    putchar(stop_byte);
+    
+    UART2_Write(start_byte);    
+    UART2_Write(data_bytes[0]);
+    UART2_Write(data_bytes[1]);
+    UART2_Write(checksum);
+    UART2_Write(stop_byte);
+    
+    //putchar(start_byte);
+//    putchar(data_bytes[0]);
+//    putchar(data_bytes[1]);
+//    putchar(checksum);
+//    putchar(stop_byte);
 }
 
 /* Function that splits two int32 into eight bytes
