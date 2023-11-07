@@ -64,7 +64,9 @@ extern "C" {
 #define     initUart1           uart1_init
 #define     initUart2           uart2_init
 #define 	initUart2_wInt      uart2_wInt_init	
-#define     initLCD             lcd_init            
+#define     initLCD             lcd_init        
+
+#define     getch_nb            rec_one_int8_nb    
 
 
 
