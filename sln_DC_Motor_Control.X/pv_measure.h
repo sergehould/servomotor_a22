@@ -12,6 +12,7 @@
 
 #ifndef  SIMULATION
 int32_t get_pv(void);
+void set_pv(int pv);
 #endif
 
 void initPV_measure(void);
