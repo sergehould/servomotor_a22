@@ -56,7 +56,9 @@ void __ISR( _CHANGE_NOTICE_VECTOR, IPL1SOFT) CNInterrupt( void){
 int get_pv(void){
     return pos;
 }
-
+void set_pv(int pv){
+    pos =pv;
+}
 /* Must be called at a constant period. e.g. every 10 mS*/
 /* Reads the speed in RPM */
 int get_speed(void){
