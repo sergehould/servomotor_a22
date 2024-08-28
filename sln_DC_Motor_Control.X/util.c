@@ -12,12 +12,18 @@
  * Serge Hould      13 Dec 2021     v1.1 Adapt for MICROSTICK II
  * Serge Hould      11 April 2022   v1.2 Modify heartbeat macros
  * SH               28 June 2023    v1.3 Add  map function 
+ * SH               13 Dec. 2023    v1.4 Exception handler
+ * SH               7 July 2024     v1.5 itoa()
  * 
  * TO DO: fine tune delay for MICROSTICK II 
  * 		
  *******************************************************************************/
 #include <xc.h>
 #include "util.h"
+#include "initBoard.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include "console.h"
 
 /*********************** Heartbeat section ************************************
  *
@@ -245,7 +251,7 @@ void delay_10us( unsigned int  t10usDelay )
 void delay_ms( unsigned int  tmsDelay )
 {
     int j;
-    tmsDelay *=100;
+    tmsDelay *=60;
     while ( 0 < tmsDelay )
     {
         tmsDelay--;
@@ -356,6 +362,104 @@ void delay_ms( unsigned int  tmsDelay )
 /********************* End of Blocking Delay section  section******************/
 
 /* Map function */
+/* Long version */
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+/* Float version */
+float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+/******************** Exception Handler section*********************************/
+
+#if defined  MX3
+/* Exception handler that prints a message to the active console */
+/* It also blinks all LEDS every 100mS                           */
+void _general_exception_handler( unsigned c, unsigned s){  
+    static int line =0;
+    ios_init();
+    while (1){
+        LCD_WriteStringAtPos("Exception called", line, 0);
+        LCD_WriteStringAtPos("                 ", line ==0? 1: 0, 0);
+        //printf("\n\rException called\n                ");
+        /* Blinks all LEDs*/
+        LATA = LATA & 0xffffff00;
+        delay_ms(100);
+        LATA = LATA | 0x000000ff;
+        line = line ==0? 1: 0;
+        delay_ms(100);
+    }
+} // exception handler
+#elif   defined EXPLORER_16_32
+/* Exception handler that prints a message to the active console */
+/* It also blinks all LEDS every 100mS                           */
+void _general_exception_handler( unsigned c, unsigned s){  
+    ios_init();
+    while (1){
+        printf("\n\rException called\n                ");
+        /* Blinks all LEDs*/
+        LATA = LATA & 0xffffff00;
+        delay_ms(100);
+        LATA = LATA | 0x000000ff;
+        printf("\n\r                \n                ");
+        delay_ms(100);
+    }
+} // exception handler
+#elif defined MICROSTICK_II
+    // todo
+#endif
+
+/******************** End of Exception Handler section*********************************/
+
+// A utility function to reverse a string
+void reverse(char str[], int length) {
+    int start = 0;
+    int end = length - 1;
+    while (start < end) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        end--;
+        start++;
+    }
+}
+
+// Implementation of itoa()
+char* itoa(int num, char* str, int _base){
+    int i = 0;
+    bool isNegative = false;
+
+    // Handle 0 explicitly, otherwise empty string is printed for 0
+    if (num == 0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+
+    // In standard itoa(), negative numbers are handled only with _base 10.
+    // Otherwise, numbers are considered unsigned.
+    if (num < 0 && _base == 10) {
+        isNegative = true;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0) {
+        int rem = num % _base;
+        str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+        num = num / _base;
+    }
+
+    // If number is negative, append '-'
+    if (isNegative)
+        str[i++] = '-';
+
+    str[i] = '\0'; // Null-terminate string
+
+    // Reverse the string
+    reverse(str, i);
+
+    return str;   
+}
+
