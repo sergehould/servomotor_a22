@@ -12,7 +12,7 @@
       <itemPath>Tick_core.h</itemPath>
       <itemPath>console.h</itemPath>
       <itemPath>initBoard.h</itemPath>
-      <itemPath>../../../MPLABXProjects2/servomotor_a22/sln_DC_Motor_Control.X/util.h</itemPath>
+      <itemPath>util.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -29,7 +29,7 @@
       <itemPath>Tick_core.c</itemPath>
       <itemPath>console.c</itemPath>
       <itemPath>initBoard.c</itemPath>
-      <itemPath>../../../MPLABXProjects2/servomotor_a22/sln_DC_Motor_Control.X/util.c</itemPath>
+      <itemPath>util.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
