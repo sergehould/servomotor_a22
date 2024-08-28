@@ -22,8 +22,8 @@
  * SH				30 May 2022			Add LCD_SETTLE_TIME macro
  * SH               6 June 2023         Add uart3_init() and UART3 macro
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-#ifndef __CONSOLE2_H_
-#define __CONSOLE2_H_
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 /* Provide C++ Compatibility */
 #ifdef __cplusplus
@@ -66,7 +66,8 @@ extern "C" {
 #define 	initUart2_wInt      uart2_wInt_init	
 #define     initLCD             lcd_init        
 
-#define     getch_nb            rec_one_int8_nb    
+#define     get_byte            rec_one_int8_nb
+#define     put_byte            send_one_int8    
 
 
 
@@ -75,6 +76,7 @@ enum my_fp {
  C_UART2,
  C_UART3,
  C_UART4,
+ C_UART5,
  C_LCD
 };
 
@@ -135,6 +137,8 @@ void LCDPos(char pos);
 void LCDPutString( char *array);
 void DisplayMSG (char *);
 void LCDPut(char A);
+void LCD_WriteBytesAtPosCgram(unsigned char *pBytes, unsigned char len, unsigned char bAdr);
+void LCD_WriteStringAtPos(char *szLn, unsigned char idxLine, unsigned char idxPos);
 
 /** UART2 Driver Hardware Flags
 
@@ -180,21 +184,28 @@ void LCDPut(char A);
 //}UART2_STATUS;
 
 void UART2_Initialize(void);
-void uart2_init( void);
-void uart1_init( void);
-void uart3_init( void);
-void uart2_wInt_init( void);
+void uart2_init( int baud);
+void uart1_init( int);
+void uart3_init( int);
+void uart5_init( int);
+void uart2_wInt_init(int);
 int putc2(char c);
+int putc3(char c);
+int putc5(char c);
 int putc2_noHard(char c);
 char getc2( void);
 void puts2( char *str );
 void outUint8(unsigned char u8_x);
 void putI8(unsigned char u8_x);
 void Uart2_init( void);
-char getch_nb( void);
+char get_byte( void);
+void put_byte(char tx);
 char getch_nb_v2( void);
+char getch_b();
 void send_one_int16(int16_t data);
 void send_two_int32(int sp, int pv);
+int16_t rec_one_int16_nb();
+
 /**
   Section: Macro Declarations
 */
@@ -309,14 +320,17 @@ void UART2_Write(uint8_t txData);
 //UART2_STATUS UART2_StatusGet (void );
 
 
-void UART_InitPoll(unsigned int baud);
+void UART4_InitPoll(unsigned int baud);
 void UART_Init(unsigned int baud);
 void UART_PutString(char szData[]);
-void uart4_init(void);
+void uart4_init(int);
 
 // private functions
-void UART_ConfigurePins();
-void UART_ConfigureUart(unsigned int baud);
+void UART4_ConfigurePins();
+void UART4_ConfigureUart(unsigned int baud);
+
+void UART3_ConfigurePins();
+void UART3_ConfigureUart(unsigned int);
 
 
 /*Call back*/
