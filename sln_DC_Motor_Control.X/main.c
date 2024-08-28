@@ -33,8 +33,8 @@
 int main(void){
 
     /**** Initializes UARTs *****/
-    uart1_init();
-    uart2_init();;  
+    uart1_init(115200);
+    uart2_init(115200);  
     stdio_set(C_UART1);
     printf("Board reset1\n");
     stdio_set(C_UART2);
