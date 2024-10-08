@@ -68,6 +68,7 @@ extern "C" {
 
 #define     get_byte            rec_one_int8_nb
 #define     put_byte            send_one_int8    
+#define     put_int16           send_one_int16
 
 
 
