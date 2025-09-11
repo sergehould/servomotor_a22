@@ -25,6 +25,7 @@
 #include "pv_measure.h"
 #include "configuration.h"
 #include "adc.h"
+#include "public.h"
 
 #define LED3    LATAbits.LATA0
 
