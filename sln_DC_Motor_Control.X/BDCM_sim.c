@@ -14,8 +14,7 @@
 #include <math.h>
 #include <xc.h>
 #include <stdio.h>
-#include "../../common/console.h"
-#include "console_print.h"
+#include "console.h"
 #include "BDCM_sim.h"
 #include <stdint.h>
 #include <string.h>

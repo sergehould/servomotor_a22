@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "initBoard.h"
 #include "console.h"
-#include "DCMotor_model.h"
+#include "BDCM_sim.h"
 #include "pwm.h"
 #include "pv_measure.h"
 #include "configuration.h"
