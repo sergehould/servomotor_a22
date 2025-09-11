@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 #ifndef  SIMULATION
-int32_t get_pv(void);
-void set_pv(int pv);
+int pv_get(void);
+void pv_set(int pv);
 #endif
 
 void initPV_measure(void);
