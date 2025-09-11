@@ -34,7 +34,7 @@ void initPWM(void);
 void PMOD_init(void);
 
 #ifndef  SIMULATION
-void set_pwm(int);
+void pwm_set(int);
 #endif
 
 
