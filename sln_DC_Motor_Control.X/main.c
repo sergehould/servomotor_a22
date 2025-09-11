@@ -30,9 +30,7 @@
 #define LED3    LATAbits.LATA0
 
 
-
 int main(void){
-
     /**** Initializes UARTs *****/
     uart1_init(115200);
     uart2_init(115200);  
@@ -43,6 +41,6 @@ int main(void){
    
     /* Super loop */
 	while (1){
-
+       
     }   
 }

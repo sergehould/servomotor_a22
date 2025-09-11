@@ -97,3 +97,16 @@ void pwm_set(int on){
             else if(on_time2  < 0 ) on_time2=0;
 }
 #endif
+void PMOD_init(void){
+/*PMOD I/Os tris*/
+    TRISGbits.TRISG9 = 0;    //Dir P14
+    TRISGbits.TRISG8 = 0;    //EN P12
+    TRISGbits.TRISG7 = 1;    //SA channel P11
+    TRISGbits.TRISG6 = 1;    //SB channel P10
+ 
+     /*PMOD I/Os setting*/
+    LATGbits.LATG9 =1;  //dir
+    LATGbits.LATG8 =1;  //EN
+}
+
+
