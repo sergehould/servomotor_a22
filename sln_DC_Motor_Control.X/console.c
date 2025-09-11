@@ -47,8 +47,9 @@
 #include "console.h"
 #include <sys/attribs.h>
 #include <string.h>
+//#include "../../projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/configuration.h"
 
-
+//extern int pos_int32 __attribute__((persistent));
 #ifdef RTOS
 /* Kernel includes. */
 #include "../../Source/include/FreeRTOS.h"
@@ -1055,16 +1056,18 @@ char getch_b( void)
  Returns the received character if not empty.
  Returns the previous value if empty.
 */
-char get_byte( void){
+#ifndef SIMULATION
+char get_byte( int p){
    static char last =0;
    if(!(U2STAbits.URXDA == 1)){
-       return last;      // read the character from the receive buffer
+       return last;      
    }
    else {
        last = U2RXREG; // if not empty
        return last;
    }
 }// 
+#endif
 
 
    /*******************************************************************************
@@ -1184,7 +1187,7 @@ void UART2_Write(uint8_t txData){
 //	}
 //
 //}
-
+#ifndef SIMULATION
 /* Function that sends one byte to the serial port */
 void put_byte(char tx) {
     UART2_Write(tx);
@@ -1258,37 +1261,50 @@ void send_two_int32(int sp, int pv){
         }
 }
 
+/* Does not receive properly. 
+ Receives only the first frame of 5 bytes at reset. 
+ The next frames are not detected - it seems that 
+ it receives only one of the 5 bytes.
+ I tried to flush the U2RXREG to no avail
+ I also reduced the reading rate to no avail 
+ I replace get_byte() by getch_b() to no avail 
+ The receiver seems to have NO buffer */
 int16_t rec_one_int16_nb() {
-    uint8_t byte;
-    uint8_t start_byte = START_BYTE;
-    uint8_t stop_byte = STOP_BYTE;
-    uint8_t data_bytes[2];
-    uint8_t checksum = start_byte + stop_byte;
+    unsigned int byte;
+    unsigned int start_byte = START_BYTE;
+    unsigned int stop_byte = STOP_BYTE;
+    unsigned int data_bytes[2];
+    unsigned char checksum = start_byte + stop_byte;
     int i;
-    static int16_t last =0;
+    static unsigned int last =0;
+    
 
-    if ((byte = get_byte()) != start_byte) {
+    if ((byte =get_byte(1)) != start_byte) {
         return last;
     }
 
     for (i = 0; i < 2; i++) {
-        data_bytes[i] = get_byte();
+        data_bytes[i] =get_byte(1);
         checksum += data_bytes[i];
     }
-    byte = get_byte();
+    byte =get_byte(1);
     if (byte != checksum) {
         // Checksum error
         return last;
     }
-
-    if (get_byte()!= stop_byte) {
+    byte =get_byte(1);
+    if (byte != stop_byte) {
         // Stop byte error
         return last;
     }
-    last = (data_bytes[0] << 8) | data_bytes[1];
+    last = (data_bytes[1] << 8) | data_bytes[0];
+    
+//   while(!(U2STAbits.URXDA == 1)){
+//      toto =U2RXREG;      // read the character from the receive buffer
+//   }
     return last;
 }
-
+#endif
 /***************** Uart1 section************************************/
 
 
