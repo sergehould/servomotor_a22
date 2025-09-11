@@ -60,15 +60,17 @@ extern "C" {
 //#include "peripheral/pmp.h"
     
 //#include "../common/pmp.h"
+#define PURGE 1    
 
 #define     initUart1           uart1_init
 #define     initUart2           uart2_init
 #define 	initUart2_wInt      uart2_wInt_init	
 #define     initLCD             lcd_init        
 
-#define     get_byte            rec_one_int8_nb
-#define     put_byte            send_one_int8    
+//#define     get_byte            rec_one_int8_nb
+//#define     put_byte            send_one_int8    
 #define     put_int16           send_one_int16
+#define     get_int16           rec_one_int16_nb
 
 
 
@@ -199,7 +201,7 @@ void puts2( char *str );
 void outUint8(unsigned char u8_x);
 void putI8(unsigned char u8_x);
 void Uart2_init( void);
-char get_byte( void);
+char get_byte( int);
 void put_byte(char tx);
 char getch_nb_v2( void);
 char getch_b();
