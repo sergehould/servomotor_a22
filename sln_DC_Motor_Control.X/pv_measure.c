@@ -27,6 +27,7 @@
 
 static inline int encState(void);
 static void encoderTask(void);
+static void encoderTask2(void);
 
 static int32_t pos=0;  // motor position
 
@@ -53,12 +54,14 @@ void __ISR( _CHANGE_NOTICE_VECTOR, IPL1SOFT) CNInterrupt( void){
 #ifndef  SIMULATION
 /* In simulation mode, get_pv() is provided by DCMotor_model3.c */
 /* In target mode, get_pv() is provided respectively by pv_measure.c */
-int get_pv(void){
+int pv_get(void){
     return pos;
 }
-void set_pv(int pv){
+
+void pv_set(int pv){
     pos =pv;
 }
+
 /* Must be called at a constant period. e.g. every 10 mS*/
 /* Reads the speed in RPM */
 int get_speed(void){
@@ -162,6 +165,57 @@ void encoderTask(void) {
 	} // switch
 }
 
+
+/* Simplified version - tested ok */
+void encoderTask2(void) {
+    static enum {SM_10, SM_11,SM_01,SM_00} state=0; //
+   	switch(state){
+		case SM_10://10
+            if(ENCB ==0b1 ){
+                state = SM_11;
+                pos--;
+            }
+             else if(ENCA ==0b0 ){
+                state = SM_00;
+                pos++;  
+            }
+            else state = SM_10;
+         	break;		
+		case SM_11: //11
+            if(ENCA ==0b0 ){
+                state = SM_01;
+                pos--;
+            }
+            else if(ENCB == 0b0){
+                state = SM_10;
+                pos++;
+            }
+            else state = SM_11;
+         	break;	
+		case SM_01: //01
+            if(ENCB == 0b0 ){
+                state = SM_00;
+                pos--;         
+            }
+            else if(ENCA == 0b1){
+                state = SM_11;
+                pos++;     
+            }
+            else state = SM_01;
+         	break;	
+		case SM_00: //00
+            if(ENCA == 0b1 ){
+                state = SM_10;
+                pos--;
+            }
+            else if(ENCB == 0b1){
+                state = SM_01;
+                pos++;
+            }
+            else state = SM_00;
+         	break;	
+	} // switch
+}
 
 void setCnt(int cnt){
     pos= cnt;
