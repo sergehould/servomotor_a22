@@ -48,6 +48,7 @@
 #include <sys/attribs.h>
 #include <string.h>
 //#include "../../projects/DC_Motor_Ctl/sln_DC_Motor_Control.X/configuration.h"
+#include "configuration.h"
 
 //extern int pos_int32 __attribute__((persistent));
 #ifdef RTOS
