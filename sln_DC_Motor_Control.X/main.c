@@ -31,13 +31,19 @@
 
 
 int main(void){
-    /**** Initializes UARTs *****/
-    uart1_init(115200);
-    uart2_init(115200);  
-    stdio_set(C_UART1);
-    printf("Board reset1\n");
-    stdio_set(C_UART2);
-    printf("Board reset2\n");
+    /**** Initializes resources *****/
+    uart2_init(115200);
+    io_init();
+    PMOD_init();
+    initPWM();
+    initPV_measure();
+    adc_init();
+    lcd_init();
+
+    //stdio_set(C_UART2);
+    stdio_set(C_LCD);
+    printf("\n\rLine1   ");
+    printf("\n\r\nLine2   ");
    
     /* Super loop */
 	while (1){
