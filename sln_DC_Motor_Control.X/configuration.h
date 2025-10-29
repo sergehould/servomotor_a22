@@ -13,7 +13,7 @@
 #define	CONFIGURATION_H
 /* Macro to swap from simulation mode to target mode and vis-versa */
 /* To run target mode, comment out this line.                        */
-#define SIMULATION
+//#define SIMULATION
 
 #define DIR             LATGbits.LATG9  //dir
 #define HUNDRED_DUTY    10000   //10000 uS or 100 Hz

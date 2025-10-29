@@ -9,6 +9,7 @@
 #define	PUBLIC_H
 #include <stdint.h>
 /* Your public functions here */
+void ol_loop (void);
 
 #endif	/* PUBLIC_H */
 
