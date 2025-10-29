@@ -41,6 +41,7 @@ int main(void){
    
     /* Super loop */
 	while (1){
+        ol_loop();
        
     }   
 }
