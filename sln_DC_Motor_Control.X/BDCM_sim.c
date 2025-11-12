@@ -8,13 +8,16 @@
  * This model works at 100Hz (same as real motor) and important variables are ints 
  * rather than floats. The tic granularity is 1 or 2 maximum allowing to simulate 
  * the gerbox-less motor.
+ *      
+ *  SH      12 Nov. 2025    pwm_set() passes float value from -100.00 to +100.00
  * 
  * */                                                 
 
 #include <math.h>
 #include <xc.h>
 #include <stdio.h>
-#include "console.h"
+#include "../../common/console.h"
+#include "console_print.h"
 #include "BDCM_sim.h"
 #include <stdint.h>
 #include <string.h>
@@ -73,7 +76,56 @@ static void response_print_pos_neg2(int console, int range, int scale, int zero,
 #define     DT      0.001  // dt time increase - a tad too tight 
 
 /* Overhead is pretty tight: 50uS */
-void pwm_set(int pwm){
+//void pwm_set(int pwm){
+//    int _pwm=0;
+//    /* Electrical */
+//    double vm; // voltage across the motor 
+//    double vref; // pwm converted into volts
+//    if(pwm >HUNDRED_DUTY-1   ) _pwm = HUNDRED_DUTY-1  ;
+//    else if(pwm  < -HUNDRED_DUTY+1 ) _pwm = -HUNDRED_DUTY+1;
+//    else _pwm =pwm;
+//    time++;
+//    vref =(double)_pwm/20;  
+//    vm = vref-KS*speed; // vm = vref -bemf = vref - (Ks * speed)
+//    accel = vm*_J;
+//    speed = accel*DT + speed; 
+//    pv1 = pv1+ speed*DT;
+//
+//    if(set_pv_5 ==1){
+//            pv1= 5;
+//            speed=0;
+//            accel=0;
+//    }
+//    else if (set_pv_10 ==1){
+//            pv1= 10;
+//            speed=0;
+//            accel=0;
+//    }
+//    else if (set_pv_minus_10 ==1){
+//            pv1= -10;
+//            speed=0;
+//            accel=0;
+//    }
+//    else if (set_pv_minus_5 ==1){
+//            pv1= -5;
+//            speed=0;
+//            accel=0;
+//    }
+//    else if (set_pv_25 ==1){
+//            pv1= 25;
+//            speed=0;
+//            accel=0;
+//    }
+//    else if (set_pv_minus_25 ==1){
+//            pv1= -25;
+//            speed=0;
+//            accel=0;
+//    }
+//
+// }
+
+void pwm_set(float pwm_f){
+    int pwm = (int)pwm_f*100; // float to int conversion
     int _pwm=0;
     /* Electrical */
     double vm; // voltage across the motor 
@@ -120,7 +172,6 @@ void pwm_set(int pwm){
     }
 
  }
-
 /* In simulation mode, get_pv() and reaADC() are provided by BDCM_sim.c */
 /* In target mode, get_pv() and reaADC() are provided respectively by pv_measure.c and adc32.c */
 int pv_get(void){    
