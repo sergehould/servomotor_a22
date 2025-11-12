@@ -32,7 +32,7 @@
 
 int main(void){
     /**** Initializes resources *****/
-    uart2_init(115200);
+    //uart2_init(115200);
     io_init();
     PMOD_init();
     initPWM();
